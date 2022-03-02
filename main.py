@@ -10,6 +10,10 @@ import neuralintents
 from neuralintents import GenericAssistant
 import pyttsx3 as tts
 
+spotify = authorization.auth()
+genres = spotify.recommendation_genre_seeds()
+
+print(genres)
 # introduces a recognition software
 recognition = speech_recognition.Recognizer()
 
