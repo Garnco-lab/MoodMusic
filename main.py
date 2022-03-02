@@ -19,3 +19,7 @@ computerSpeaker.setProperty('rate', 150)
 virtualAssistant = GenericAssistant('intents.json')
 # trains model automatically from the library
 virtualAssistant.train_model()
+
+mappings = {
+    # early mapping file progress
+}
