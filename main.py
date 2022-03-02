@@ -18,21 +18,20 @@ computerSpeaker = tts.init()
 computerSpeaker.setProperty('rate', 150)
 
 
-def helloWorld():
-    print("hello world")
+def happy():
+    print("happy")
 
 def recognize_sad():
-    computerSpeaker.say("Okay lets play something sad")
-    myobj = gTTS(text="my text", lang='en', slow=False)
-    myobj.save("super.mp3")
-    os.system("super.mp3")
-    print("this worked")
+    print("sad")
+
+def angry():
+    print("angry")
 
 
 mappings = {
     'sad': recognize_sad,
-    'happy': helloWorld,
-    'angry': helloWorld
+    'happy': happy,
+    'angry': angry
 }
 
 # The main virtual assistant
