@@ -1,10 +1,14 @@
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+import speech_recognition
 
-# Trying to figure out authorization scope using online examples
+import authorization
+import time
+import sys
+import pandas as pd
+import neuralintents
+from neuralintents import GenericAssistant
+import pyttsx3 as tts
 
-client_id='your_spotify_client_id'
-client_secret='your_spotify_client_secret'
-redirect_uri='your_url_to_redirect'
-username = 'your_username_spotify_code'
-scope = 'playlist-modify-public'
+recognition = speech_recognition.Recognizer()
+
+computerSpeaker = tts.init()
+computerSpeaker.setProperty('rate', 150)
