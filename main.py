@@ -1,5 +1,6 @@
 import speech_recognition
-
+import os
+from gtts import gTTS
 import authorization
 import time
 import sys
@@ -22,10 +23,14 @@ def helloWorld():
 
 def recognize_sad():
     computerSpeaker.say("Okay lets play something sad")
+    myobj = gTTS(text="my text", lang='en', slow=False)
+    myobj.save("super.mp3")
+    os.system("super.mp3")
+    print("this worked")
 
 
 mappings = {
-    'sad': recognize_sad(),
+    'sad': recognize_sad,
     'happy': helloWorld,
     'angry': helloWorld
 }
