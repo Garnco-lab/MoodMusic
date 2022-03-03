@@ -6,6 +6,7 @@ import time
 import sys
 import pandas as pd
 import neuralintents
+from tqdm import tqdm
 
 from neuralintents import GenericAssistant
 import pyttsx3 as tts
@@ -13,33 +14,44 @@ import pyttsx3 as tts
 spotify = authorization.auth()
 genres = spotify.recommendation_genre_seeds()
 
+music_data_dictionary = {
+    "id": [],
+    "genre": [],
+    "track_name": [],
+    "artist_name": [],
+    "valence": [],
+    "energy": [],
+}
+
+for music_genre in tqdm(genres):
+    print(music_genre)
+
+
 print(genres)
 # introduces a recognition software
 recognition = speech_recognition.Recognizer()
 
 # introduces the computer speaker
 computerSpeaker = tts.init()
-computerSpeaker.setProperty('rate', 150)
+computerSpeaker.setProperty("rate", 150)
 
 
 def happy():
     print("happy")
 
+
 def recognize_sad():
     print("sad")
+
 
 def angry():
     print("angry")
 
 
-mappings = {
-    'sad': recognize_sad,
-    'happy': happy,
-    'angry': angry
-}
+mappings = {"sad": recognize_sad, "happy": happy, "angry": angry}
 
 # The main virtual assistant
-virtualAssistant = GenericAssistant('intents.json', intent_methods=mappings)
+virtualAssistant = GenericAssistant("intents.json", intent_methods=mappings)
 # trains model automatically from the library
 virtualAssistant.train_model()
 
