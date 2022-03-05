@@ -6,13 +6,21 @@ import time
 import sys
 import pandas as pd
 import neuralintents
+from flask import Flask
 from tqdm import tqdm
+
+import re, requests, subprocess, urllib.parse, urllib.request
+from bs4 import BeautifulSoup
+import pywhatkit
 
 from neuralintents import GenericAssistant
 import pyttsx3 as tts
 
 spotify = authorization.auth()
 genres = spotify.recommendation_genre_seeds()
+
+print(spotify.playback_devices)
+# spotify.playback_start_tracks('265Anh9hGoozFigjUVLUeD', offset=None, position_ms=None, device_id='BQAxlnLRpn7GZ6KExeSjVZN3BtAX2dbYsB0BC-IcXsUh35d2gLKgCe7OyhEH9XJ0qbr9RLXnEwHKmnFW2dU')
 
 music_data_dictionary = {
     "id": [],
@@ -21,13 +29,45 @@ music_data_dictionary = {
     "artist_name": [],
     "valence": [],
     "energy": [],
+    "key": []
+}
+
+happy_song_dictionary = {
+
+}
+
+sad_song_dictionary = {
+
 }
 
 for music_genre in tqdm(genres):
-    print(music_genre)
+
+    # grabs recommendations
+    recommendations = spotify.recommendations(genres=[music_genre], limit=100)
+    # imports the json file and then converts it to python readable values
+    recommendations = eval(
+        recommendations.json()
+        .replace("null", "-999")
+        .replace("false", "False")
+        .replace("true", "True")
+    )["tracks"]
+
+    for music_track in recommendations:
+        music_data_dictionary["id"].append(music_track["id"])
+        music_data_dictionary["genre"].append(music_genre)
+        track_meta = spotify.track(music_track["id"])
+        music_data_dictionary["track_name"].append(track_meta.name)
+        music_data_dictionary["artist_name"].append(track_meta.album.artists[0].name)
+        track_features = spotify.track_audio_features(music_track["id"])
+        music_data_dictionary["valence"].append(track_features.valence)
+        music_data_dictionary["energy"].append(track_features.energy)
+        music_data_dictionary["key"].append(track_features.key)
+
+        print(music_data_dictionary["id"])
 
 
-print(genres)
+
+
 # introduces a recognition software
 recognition = speech_recognition.Recognizer()
 
