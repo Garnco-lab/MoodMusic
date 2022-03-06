@@ -8,6 +8,8 @@ import pandas as pd
 import neuralintents
 from flask import Flask
 from tqdm import tqdm
+import pafy
+import vlc
 
 import re, requests, subprocess, urllib.parse, urllib.request
 from bs4 import BeautifulSoup
@@ -40,6 +42,26 @@ sad_song_dictionary = {
 
 }
 
+# music search test
+music = "Nirvana smells like teen spirit"
+query = urllib.parse.urlencode({"search_query": music})
+formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query)
+
+results = re.findall(r"watch\?v=(\S{11})", formatUrl.read().decode())
+clip = requests.get("https://www.youtube.com/watch?v=" + "{}".format(results[0]))
+clip2 = "https://www.youtube.com/watch?v=" + "{}".format(results[0])
+
+inspect = BeautifulSoup(clip.content, "html.parser")
+yt_title = inspect.find_all("meta", property="og:title")
+
+for concatMusic1 in yt_title:
+    pass
+
+print(concatMusic1['content'])
+
+print(clip2)
+
+
 for music_genre in tqdm(genres):
 
     # grabs recommendations
@@ -47,9 +69,9 @@ for music_genre in tqdm(genres):
     # imports the json file and then converts it to python readable values
     recommendations = eval(
         recommendations.json()
-        .replace("null", "-999")
-        .replace("false", "False")
-        .replace("true", "True")
+            .replace("null", "-999")
+            .replace("false", "False")
+            .replace("true", "True")
     )["tracks"]
 
     for music_track in recommendations:
@@ -64,9 +86,6 @@ for music_genre in tqdm(genres):
         music_data_dictionary["key"].append(track_features.key)
 
         print(music_data_dictionary["id"])
-
-
-
 
 # introduces a recognition software
 recognition = speech_recognition.Recognizer()
