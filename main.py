@@ -1,130 +1,62 @@
+import random
+import pyttsx3 as tts
 import speech_recognition
-import os
-from gtts import gTTS
-import authorization
-import time
-import sys
-import pandas as pd
-import neuralintents
-from flask import Flask
-from tqdm import tqdm
-import pafy
-import vlc
-
-import re, requests, subprocess, urllib.parse, urllib.request
-from bs4 import BeautifulSoup
-import pywhatkit
 
 from neuralintents import GenericAssistant
-import pyttsx3 as tts
+from tqdm import tqdm
+
+from classes import musicPlayer
+
+import authorization
+
+mood_value = 0.15
+
+playmusic = musicPlayer.MusicPlayer()
+
 
 spotify = authorization.auth()
 genres = spotify.recommendation_genre_seeds()
 
-print(spotify.playback_devices)
-# spotify.playback_start_tracks('265Anh9hGoozFigjUVLUeD', offset=None, position_ms=None, device_id='BQAxlnLRpn7GZ6KExeSjVZN3BtAX2dbYsB0BC-IcXsUh35d2gLKgCe7OyhEH9XJ0qbr9RLXnEwHKmnFW2dU')
+track_count = 0
 
 music_data_dictionary = {
     "id": [],
-    "genre": [],
     "track_name": [],
     "artist_name": [],
     "valence": [],
     "energy": [],
-    "key": []
+    "danceability": [],
 }
-
-happy_song_dictionary = {
-
-}
-
-sad_song_dictionary = {
-
-}
-
-# music search test
-music = "Nirvana smells like teen spirit"
-query = urllib.parse.urlencode({"search_query": music})
-formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query)
-
-results = re.findall(r"watch\?v=(\S{11})", formatUrl.read().decode())
-clip = requests.get("https://www.youtube.com/watch?v=" + "{}".format(results[0]))
-clip2 = "https://www.youtube.com/watch?v=" + "{}".format(results[0])
-
-inspect = BeautifulSoup(clip.content, "html.parser")
-yt_title = inspect.find_all("meta", property="og:title")
-
-for concatMusic1 in yt_title:
-    pass
-
-print(concatMusic1['content'])
-
-print(clip2)
 
 
 for music_genre in tqdm(genres):
 
     # grabs recommendations
-    recommendations = spotify.recommendations(genres=[music_genre], limit=100)
+    recommendations = spotify.recommendations(genres=[music_genre], limit=1)
     # imports the json file and then converts it to python readable values
     recommendations = eval(
         recommendations.json()
-            .replace("null", "-999")
-            .replace("false", "False")
-            .replace("true", "True")
+        .replace("null", "-999")
+        .replace("false", "False")
+        .replace("true", "True")
     )["tracks"]
 
     for music_track in recommendations:
         music_data_dictionary["id"].append(music_track["id"])
-        music_data_dictionary["genre"].append(music_genre)
         track_meta = spotify.track(music_track["id"])
         music_data_dictionary["track_name"].append(track_meta.name)
         music_data_dictionary["artist_name"].append(track_meta.album.artists[0].name)
         track_features = spotify.track_audio_features(music_track["id"])
         music_data_dictionary["valence"].append(track_features.valence)
         music_data_dictionary["energy"].append(track_features.energy)
-        music_data_dictionary["key"].append(track_features.key)
+        music_data_dictionary["danceability"].append(track_features.danceability)
 
-        print(music_data_dictionary["id"])
+print(music_data_dictionary[0])
 
-# introduces a recognition software
-recognition = speech_recognition.Recognizer()
+selection = random.randint(0, len(music_data_dictionary["artist_name"]) - 1)
 
-# introduces the computer speaker
-computerSpeaker = tts.init()
-computerSpeaker.setProperty("rate", 150)
+playmusic.play_music(
+    music_data_dictionary["artist_name"][selection],
+    music_data_dictionary["track_name"][selection],
+)
 
-
-def happy():
-    print("happy")
-
-
-def recognize_sad():
-    print("sad")
-
-
-def angry():
-    print("angry")
-
-
-mappings = {"sad": recognize_sad, "happy": happy, "angry": angry}
-
-# The main virtual assistant
-virtualAssistant = GenericAssistant("intents.json", intent_methods=mappings)
-# trains model automatically from the library
-virtualAssistant.train_model()
-
-while True:
-
-    try:
-        with speech_recognition.Microphone() as mic:
-            recognition.adjust_for_ambient_noise(mic, duration=0.2)
-            voice_audio = recognition.listen(mic)
-
-            messenger = recognition.recognize_google(voice_audio)
-            messenger = messenger.lower()
-
-        virtualAssistant.request(messenger)
-        # re-instantiate voice
-    except speech_recognition.UnknownValueError:
-        recognition = speech_recognition.Recognizer()
