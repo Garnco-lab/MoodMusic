@@ -18,6 +18,10 @@ playmusic = musicPlayer.MusicPlayer()
 spotify = authorization.auth()
 genres = spotify.recommendation_genre_seeds()
 
+random.shuffle(genres)
+
+genres = genres[:len(genres)//2]
+
 # the track counter, currently unused
 track_count = 0
 
