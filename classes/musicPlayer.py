@@ -11,13 +11,11 @@ from bs4 import BeautifulSoup
 
 class MusicPlayer:
     def __init__(self):
-        self.artist_name = ""
-        self.track_name = ""
+        self.song = ""
 
-    def play_music(self, artist, track):
-        self.artist_name = artist
-        self.track_name = track
-        music = self.artist_name + " " + self.track_name
+    def play_music(self, music_selection):
+        self.song = music_selection
+        music = self.song
         query = urllib.parse.urlencode({"search_query": music})
         formatUrl = urllib.request.urlopen("https://www.youtube.com/results?" + query)
 
