@@ -1,6 +1,6 @@
 import pyttsx3 as tts
 import speech_recognition
-
+from multiprocessing import Process, Queue
 from neuralintents import GenericAssistant
 
 # introduces a recognition software
@@ -36,13 +36,15 @@ def recognize_angry():
 
 def recognize_stop():
     print("stop")
+    pickMusic.stop()
+
 
 
 mappings = {
     "sad": recognize_sad,
     "happy": recognize_happy,
-    "angry": recognize_angry(),
-    "stop": recognize_stop(),
+    "angry": recognize_angry,
+    "stop": recognize_stop
 }
 
 # The main virtual assistant

@@ -7,7 +7,6 @@ import csv
 
 
 def wrapper():
-
     with open('music-value.txt') as f:
         contents = float(f.read())
         print(contents)
@@ -46,9 +45,9 @@ def wrapper():
         # imports the json file and then converts it to python readable values
         recommendations = eval(
             recommendations.json()
-            .replace("null", "-999")
-            .replace("false", "False")
-            .replace("true", "True")
+                .replace("null", "-999")
+                .replace("false", "False")
+                .replace("true", "True")
         )["tracks"]
 
         for music_track in recommendations:
@@ -77,49 +76,49 @@ def wrapper():
 
             if mood_value <= 0.10:
                 if (
-                    (0 <= float(row[3]) <= (mood_value + 0.05))
-                    and (float(row[4]) <= (mood_value + 0.1))
-                    and (float(row[5]) <= (mood_value + 0.2))
+                        (0 <= float(row[3]) <= (mood_value + 0.05))
+                        and (float(row[4]) <= (mood_value + 0.1))
+                        and (float(row[5]) <= (mood_value + 0.2))
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
             if mood_value <= 0.25:
                 if (
-                    ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
-                    and (float(row[4]) <= (mood_value + 0.1))
-                    and (float(row[5]) <= (mood_value + 0.2))
+                        ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
+                        and (float(row[4]) <= (mood_value + 0.1))
+                        and (float(row[5]) <= (mood_value + 0.2))
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
             if mood_value <= 0.50:
                 if (
-                    ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
-                    and (float(row[4]) <= (mood_value + 0.1))
-                    and (float(row[5]) <= mood_value)
+                        ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
+                        and (float(row[4]) <= (mood_value + 0.1))
+                        and (float(row[5]) <= mood_value)
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
             if mood_value <= 0.75:
                 if (
-                    ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
-                    and (float(row[4]) >= (mood_value - 0.1))
-                    and (float(row[5]) >= mood_value)
+                        ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
+                        and (float(row[4]) >= (mood_value - 0.1))
+                        and (float(row[5]) >= mood_value)
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
             if mood_value <= 0.90:
                 if (
-                    ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
-                    and (float(row[4]) >= (mood_value - 0.2))
-                    and (float(row[5]) >= (mood_value - 0.3))
+                        ((mood_value - 0.05) <= float(row[3]) <= (mood_value + 0.05))
+                        and (float(row[4]) >= (mood_value - 0.2))
+                        and (float(row[5]) >= (mood_value - 0.3))
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
             if mood_value <= 1.00:
                 if (
-                    ((mood_value - 0.1) <= float(row[3]) <= 1)
-                    and (float(row[4]) >= (mood_value - 0.3))
-                    and (float(row[5]) >= (mood_value - 0.4))
+                        ((mood_value - 0.1) <= float(row[3]) <= 1)
+                        and (float(row[4]) >= (mood_value - 0.3))
+                        and (float(row[5]) >= (mood_value - 0.4))
                 ):
                     selection = str(row[2] + " " + row[1])
                     break
@@ -128,3 +127,6 @@ def wrapper():
     # play the selected song from in audio using vlc and youtube-dl to get audio, effectively giving you the full song
     playmusic.play_music(selection)
 
+
+def stop():
+    return
