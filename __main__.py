@@ -4,15 +4,17 @@ from classes import musicPlayer
 import authorization
 import pandas as pd
 import csv
-import time
-import subprocess
+import pyttsx3 as tts
+import speech_recognition
 
+with open('music-value.txt') as f:
+    contents = float(f.read())
+    print(contents)
 # the initial mood value on how you want to feel, this will be updatable in the final application
-mood_value = 1.00
+mood_value = contents
 
 # the music player
 playmusic = musicPlayer.MusicPlayer()
-
 
 # grabbing spotify authorization and then picking genres from a variety
 spotify = authorization.auth()
@@ -20,7 +22,7 @@ genres = spotify.recommendation_genre_seeds()
 
 random.shuffle(genres)
 
-genres = genres[:len(genres)//2]
+genres = genres[: len(genres) // 2]
 
 # the track counter, currently unused
 track_count = 0
@@ -78,7 +80,6 @@ with open(csv_to_iterate_over, "r", encoding="utf-8") as csvfile:
                 and (float(row[4]) <= (mood_value + 0.1))
                 and (float(row[5]) <= (mood_value + 0.2))
             ):
-
                 selection = str(row[2] + " " + row[1])
                 break
         if mood_value <= 0.25:
@@ -121,6 +122,8 @@ with open(csv_to_iterate_over, "r", encoding="utf-8") as csvfile:
             ):
                 selection = str(row[2] + " " + row[1])
                 break
+
+print(selection)
 # play the selected song from in audio using vlc and youtube-dl to get audio, effectively giving you the full song
 playmusic.play_music(selection)
-time.sleep(25)
+# time.sleep(25)

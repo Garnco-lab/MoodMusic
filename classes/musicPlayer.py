@@ -34,10 +34,11 @@ class MusicPlayer:
         video = pafy.new(url)
         best = video.getbestaudio()
         playurl = best.url
-
-        Instance = vlc.Instance()
+        Instance = vlc.Instance('--verbose 3')
         player = Instance.media_player_new()
         Media = Instance.media_new(playurl)
         Media.get_mrl()
         player.set_media(Media)
         player.play()
+        while player.get_state() != 6:
+            continue
