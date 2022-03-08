@@ -4,8 +4,6 @@ from classes import musicPlayer
 import authorization
 import pandas as pd
 import csv
-import pyttsx3 as tts
-import speech_recognition
 
 with open('music-value.txt') as f:
     contents = float(f.read())
