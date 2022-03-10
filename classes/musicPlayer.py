@@ -41,4 +41,5 @@ class MusicPlayer:
         player.set_media(Media)
         player.play()
         while player.get_state() != 6:
+            # print("cheese")
             continue

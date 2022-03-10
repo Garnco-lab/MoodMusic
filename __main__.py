@@ -39,7 +39,6 @@ def recognize_stop():
     pickMusic.stop()
 
 
-
 mappings = {
     "sad": recognize_sad,
     "happy": recognize_happy,
@@ -53,7 +52,14 @@ virtualAssistant = GenericAssistant("intents.json", intent_methods=mappings)
 virtualAssistant.train_model()
 
 while True:
-
+    with open('C:\\Users\\Steven\\MoodMusic\\music-value.txt') as f:
+        reader = float(f.read())
+        print(reader)
+    with open('C:\\Users\\Steven\\MoodMusic\\open_program.txt') as g:
+        read_words = str(g.read())
+        if read_words == "quit":
+            quit()
+    print(read_words)
     try:
         with speech_recognition.Microphone() as mic:
             recognition.adjust_for_ambient_noise(mic, duration=0.2)
